@@ -1,19 +1,24 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/SohamGhugare/shorten-url/models"
+	"github.com/SohamGhugare/shorten-url/utility"
 	"github.com/gin-gonic/gin"
 )
 
 func ShortenUrl(c *gin.Context) {
-	body := new(models.Request)
-	if err := c.Bind(&body); err != nil {
+
+	body, err := utility.ValidateRequestBody(c)
+	if err != nil {
+		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "error parsing request body",
+			"error": err.Error(),
 		})
+		return
 	}
+
 	c.JSON(http.StatusAccepted, gin.H{
 		"body": body,
 	})
