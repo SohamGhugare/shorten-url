@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/SohamGhugare/shorten-url/initializers"
 	"github.com/gin-gonic/gin"
 )
@@ -18,5 +20,5 @@ func main(){
 	r := gin.Default()
 
 	setupRoutes(r)
-	r.Run()
+	r.Run(os.Getenv("APP_PORT"))
 }
