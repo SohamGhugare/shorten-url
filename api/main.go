@@ -4,19 +4,21 @@ import (
 	"os"
 
 	"github.com/SohamGhugare/shorten-url/initializers"
+	"github.com/SohamGhugare/shorten-url/routes"
 	"github.com/gin-gonic/gin"
 )
 
-func init(){
+func init() {
 	// Running initializers
 	initializers.LoadEnvVars()
 }
 
 func setupRoutes(r *gin.Engine) {
 	// Setting up routes
+	r.POST("/api/v1", routes.ShortenUrl)
 }
 
-func main(){
+func main() {
 	r := gin.Default()
 
 	setupRoutes(r)
