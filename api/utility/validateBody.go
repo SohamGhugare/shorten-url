@@ -5,9 +5,18 @@ import (
 	"fmt"
 
 	"github.com/SohamGhugare/shorten-url/models"
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 )
 
+/*
+VALIDATE REQUEST BODY
+This function checks for any defects in the request body and binds it to the model
+Checks:
+
+	url: not null, valid
+	short: not null
+*/
 func ValidateRequestBody(c *gin.Context) (*models.Request, error) {
 	body := new(models.Request)
 
@@ -19,6 +28,11 @@ func ValidateRequestBody(c *gin.Context) (*models.Request, error) {
 	// Checking for empty url
 	if body.URL == "" {
 		return nil, errors.New("url cannot be empty")
+	}
+
+	// Checking for invalid url
+	if !govalidator.IsURL(body.URL) {
+		return nil, errors.New("invalid url")
 	}
 
 	// Checking for empty short
