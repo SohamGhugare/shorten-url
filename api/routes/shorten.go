@@ -19,6 +19,9 @@ func ShortenUrl(c *gin.Context) {
 		return
 	}
 
+	// Enforcing HTTP on the url
+	body.URL = utility.EnforeHTTP(body.URL)
+
 	c.JSON(http.StatusAccepted, gin.H{
 		"body": body,
 	})

@@ -3,11 +3,20 @@ package utility
 import (
 	"errors"
 	"fmt"
+	"os"
 
 	"github.com/SohamGhugare/shorten-url/models"
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 )
+
+// Enforce http
+func EnforeHTTP(url string) string {
+	if url[:4] != "http" {
+		return "http://" + url
+	}
+	return url
+}
 
 /*
 VALIDATE REQUEST BODY
@@ -33,6 +42,11 @@ func ValidateRequestBody(c *gin.Context) (*models.Request, error) {
 	// Checking for invalid url
 	if !govalidator.IsURL(body.URL) {
 		return nil, errors.New("invalid url")
+	}
+
+	// Checking for domain loop
+	if body.URL == os.Getenv("DOMAIN") {
+		return nil, errors.New("you cannot enter that :)")
 	}
 
 	// Checking for empty short
