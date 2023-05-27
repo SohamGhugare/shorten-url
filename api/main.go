@@ -1,7 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"github.com/SohamGhugare/shorten-url/initializers"
+	"github.com/gin-gonic/gin"
+)
+
+func init(){
+	// Running initializers
+	initializers.LoadEnvVars()
+}
+
+func setupRoutes(r *gin.Engine) {
+	// Setting up routes
+}
 
 func main(){
-	fmt.Println("URL Shortener...")
+	r := gin.Default()
+
+	setupRoutes(r)
+	r.Run()
 }
