@@ -9,8 +9,7 @@ import (
 )
 
 var Ctx = context.Background()
-var Client *redis.Client     // actual database client with all the urls
-var RateClient *redis.Client // another client for storing rate limits
+var Client *redis.Client // actual database client with all the urls
 
 // Creates a new redis client based on your environment variables
 func CreateUrlClient(dbNo int) {
@@ -20,16 +19,6 @@ func CreateUrlClient(dbNo int) {
 		DB:       dbNo,
 	})
 	Client = rdb
-}
-
-// Creating a Rate limit client
-func CreateRateClient(dbNo int) {
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("DB_ADDR"),
-		Password: os.Getenv("DB_PASS"),
-		DB:       dbNo,
-	})
-	RateClient = rdb
 }
 
 // Create url
