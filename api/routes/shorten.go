@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/SohamGhugare/shorten-url/database"
+	"github.com/SohamGhugare/shorten-url/models"
 	"github.com/SohamGhugare/shorten-url/utility"
 	"github.com/gin-gonic/gin"
 )
@@ -18,6 +19,17 @@ func ShortenUrl(c *gin.Context) {
 		return
 	}
 
+	// Checking rate limit
+	/*
+		This function returns a gin.H object with error and rate limit reset
+		if the rate limit is exceeded
+	*/
+	errH := database.CheckRateLimit(c.ClientIP())
+	if errH != nil {
+		c.JSON(http.StatusServiceUnavailable, errH)
+		return
+	}
+
 	// Enforcing HTTP on the url
 	body.URL = utility.EnforeHTTP(body.URL)
 
@@ -29,7 +41,16 @@ func ShortenUrl(c *gin.Context) {
 		return
 	}
 
+	// Decrementing remaining requests
+	rl := database.DecrRateLimit(c.ClientIP())
+
 	c.JSON(http.StatusAccepted, gin.H{
-		"body": body,
+		"body": models.Response{
+			URL:             body.URL,
+			CustomShort:     body.CustomShort,
+			Expiry:          body.Expiry,
+			XRateRemaining:  rl,
+			XRateLimitReset: 30,
+		},
 	})
 }
