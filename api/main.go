@@ -12,7 +12,8 @@ import (
 func init() {
 	// Running initializers
 	initializers.LoadEnvVars()
-	database.CreateClient(0)
+	database.CreateUrlClient(0)
+	database.CreateRateClient(1)
 }
 
 func setupRoutes(r *gin.Engine) {
