@@ -17,7 +17,6 @@ func ResolveUrl(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusFound, gin.H{
-		"url": url,
-	})
+	c.Redirect(http.StatusPermanentRedirect, url)
+	
 }
